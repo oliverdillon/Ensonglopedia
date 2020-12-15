@@ -1,6 +1,4 @@
-package frontend;
-
-import backend.ensonglopedia;
+package ensonglopedia.frontend;
 
 import javax.swing.JFrame;
 import java.awt.Dimension;

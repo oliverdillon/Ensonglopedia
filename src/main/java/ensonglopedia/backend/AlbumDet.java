@@ -1,4 +1,4 @@
-package backend;
+package ensonglopedia.backend;
 
 public class AlbumDet {
     private String artist, MusicBook;

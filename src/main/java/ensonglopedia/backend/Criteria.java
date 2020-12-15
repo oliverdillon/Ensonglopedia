@@ -1,4 +1,4 @@
-package backend;
+package ensonglopedia.backend;
 
 public enum Criteria {
     Title,Artist,Album;

@@ -1,7 +1,7 @@
-package frontend;
+package ensonglopedia.frontend;
 
-import backend.Song;
-import backend.ensonglopedia;
+import ensonglopedia.backend.Song;
+import ensonglopedia.backend.ensonglopedia;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

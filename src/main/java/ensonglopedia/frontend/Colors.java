@@ -1,4 +1,4 @@
-package frontend;
+package ensonglopedia.frontend;
 
 import java.awt.*;
 
