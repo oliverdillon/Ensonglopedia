@@ -1,17 +1,17 @@
-package ensonglopedia.frontend;
+package com.ensonglopedia.view;
 
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 
-public class GUI {
+public class ApplicationView {
 
     //Frame
     private JFrame mainWindow;
-    private Components components;
+    private WindowView windowView;
 
-    public GUI(){
+    public ApplicationView(){
         //Initialise
         startGUI();
 
@@ -43,7 +43,7 @@ NEEDS TO CALL ALL OF THE OTHER METHODS NECESSARY FOR THE GUI.
 		}
 		*/
         ////////////CREATE WINDOW////////////
-        components = new Components();
+        windowView = new WindowView();
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
         mainWindow.setBounds(d.width/2-600, d.height/2-60, 880, 400); //set position, then dimensions for the main window when the program runs.
@@ -51,13 +51,13 @@ NEEDS TO CALL ALL OF THE OTHER METHODS NECESSARY FOR THE GUI.
         mainWindow.setLayout(new GridLayout(1,1));
         mainWindow.setVisible(true);
         mainWindow.setResizable(false);
-        mainWindow = components.addAllComponents(mainWindow);
+        mainWindow = windowView.addAllComponents(mainWindow);
 
 
 
     }
     public static void main(String[] args){
-        GUI app = new GUI();
+        ApplicationView app = new ApplicationView();
     }
 
 }

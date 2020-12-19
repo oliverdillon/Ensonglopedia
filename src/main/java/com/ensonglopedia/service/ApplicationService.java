@@ -1,18 +1,21 @@
-package ensonglopedia.backend;
+package com.ensonglopedia.service;
+
+import com.ensonglopedia.entities.MusicBookDetailsObject;
+import com.ensonglopedia.entities.SongObject;
 
 import java.io.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ensonglopedia {
-    private List<Song> Songs;
-    private String directory = "/src/main/java/ensonglopedia/storage/Ensonglopedia.csv";
+public class ApplicationService {
+    private List<SongObject> songObjects;
+    private String directory = "/src/main/java/com/ensonglopedia/dao/Ensonglopedia.csv";
     private String basedirectory = new File(".").getAbsoluteFile().toString();
 
-    public ensonglopedia(){
+    public ApplicationService(){
 
-        Songs = new ArrayList<Song>();
+        songObjects = new ArrayList<SongObject>();
         this.loadSongs();
     }
 
@@ -26,13 +29,13 @@ public class ensonglopedia {
             while (sReadLine!= null)
             {
                 String[] stringArray = sReadLine.split(",");
-                Song tempSong = new Song();
+                SongObject tempSongObject = new SongObject();
 
-                tempSong.setTitle(stringArray[0]);
-                tempSong.getAlbumDet().setArtist(stringArray[1]);
-                tempSong.getAlbumDet().setMusicBook(stringArray[2]);
+                tempSongObject.setTitle(stringArray[0]);
+                tempSongObject.getAlbumDet().setArtist(stringArray[1]);
+                tempSongObject.getAlbumDet().setMusicBook(stringArray[2]);
 
-                Songs.add(tempSong);
+                songObjects.add(tempSongObject);
                 sReadLine = reader.readLine();
             }
             reader.close();
@@ -45,37 +48,37 @@ public class ensonglopedia {
     }
 
     public void addSong(String Title,String Artist,String MusicBook){
-        Song song = new Song(Title,Artist,MusicBook);
-        //Song songTemp = new Song("","",MusicBook);
-        Song searchResults = searchSongs(song);
+        SongObject songObject = new SongObject(Title,Artist,MusicBook);
+        SongObject songObjectTemp = new SongObject("","",MusicBook);
+        SongObject searchResults = searchSongs(songObjectTemp);
 
         if(searchResults!=null){
             searchResults.setTitle(Title);
             searchResults.getAlbumDet().setArtist(Artist);
-            System.out.println("Error song already inputted");
+            System.out.println("Overwrite temp song");
         }
         else{
-            Songs.add(song);
-            System.out.println("check2");
+            songObjects.add(songObject);
+            System.out.println("Successfully added a new song");
         }
         saveClass();
     }
-    public void printSong(Song song){
-        System.out.println(song.getTitle()+"	"+song.getAlbumDet().getArtist()+"	"+song.getAlbumDet().getMusicBook());
+    public void printSong(SongObject songObject){
+        System.out.println(songObject.getTitle()+"	"+ songObject.getAlbumDet().getArtist()+"	"+ songObject.getAlbumDet().getMusicBook());
     }
 
-    public Song searchSongs(Song songForSearch){
+    public SongObject searchSongs(SongObject songObjectForSearch){
 
-        AlbumDet album1  = songForSearch.getAlbumDet();
+        MusicBookDetailsObject album1  = songObjectForSearch.getAlbumDet();
 
-        for (Iterator i = Songs.iterator(); i.hasNext();){
-            Song song = (Song)i.next();
-            AlbumDet album2 = song.getAlbumDet();
+        for (Iterator i = songObjects.iterator(); i.hasNext();){
+            SongObject songObject = (SongObject)i.next();
+            MusicBookDetailsObject album2 = songObject.getAlbumDet();
 
-            if(songForSearch.getTitle().equals(song.getTitle()))
+            if(songObjectForSearch.getTitle().equals(songObject.getTitle()))
                 if(album1.getArtist().equals(album2.getArtist()))
                     if(album1.getMusicBook().equals(album2.getMusicBook())){
-                        return song;
+                        return songObject;
                     }
         }
         return null;
@@ -86,9 +89,9 @@ public class ensonglopedia {
         {
             BufferedWriter bw=new BufferedWriter(new FileWriter(basedirectory+directory));
 
-            for (Iterator i = Songs.iterator(); i.hasNext();){
-                Song song = (Song)i.next();
-                bw.write(song.toString());
+            for (Iterator i = songObjects.iterator(); i.hasNext();){
+                SongObject songObject = (SongObject)i.next();
+                bw.write(songObject.toString());
                 bw.newLine();
                 //saves an array in the file
             }
@@ -103,30 +106,30 @@ public class ensonglopedia {
 
     }
 
-    public List <Song> searchAlbums(AlbumDet album1){
-        List <Song> searchResults = new LinkedList <Song>();
-        for (Iterator i = Songs.iterator(); i.hasNext();){
-            Song song = (Song)i.next();
-            AlbumDet album2 = song.getAlbumDet();
+    public List <SongObject> searchAlbums(MusicBookDetailsObject album1){
+        List <SongObject> searchResults = new LinkedList <SongObject>();
+        for (Iterator i = songObjects.iterator(); i.hasNext();){
+            SongObject songObject = (SongObject)i.next();
+            MusicBookDetailsObject album2 = songObject.getAlbumDet();
 
             if(album1.getArtist()!=album2.getArtist())
                 continue;
             if(album1.getMusicBook()!=album2.getMusicBook())
                 continue;
-            searchResults.add(song);
+            searchResults.add(songObject);
         }
         return searchResults;
     }
 
-    public void sortMusicBooks(Criteria criteria){
+    public void sortMusicBooks(SortingCriteria sortingCriteria){
         //sort linked list;
 
-        Collections.sort(Songs,new Comparator<Song>() {
+        Collections.sort(songObjects,new Comparator<SongObject>() {
             @Override
-            public int compare(Song o1, Song o2) {
+            public int compare(SongObject o1, SongObject o2) {
                 String temp1;
                 String temp2;
-                switch (criteria) {
+                switch (sortingCriteria) {
                     case Title:
                         temp1 = o1.getTitle();
                         temp2 = o2.getTitle();
@@ -151,13 +154,13 @@ public class ensonglopedia {
             }
         });
     }
-    public void deleteBooks(Song songToDelete){
-        AlbumDet album1  = songToDelete.getAlbumDet();
+    public void deleteBooks(SongObject songObjectToDelete){
+        MusicBookDetailsObject album1  = songObjectToDelete.getAlbumDet();
         int nextIndex =0;
         List<Integer> indices = new LinkedList <Integer>();
-        for (Iterator i = Songs.iterator(); i.hasNext();){
-            Song song = (Song)i.next();
-            AlbumDet album2 = song.getAlbumDet();
+        for (Iterator i = songObjects.iterator(); i.hasNext();){
+            SongObject songObject = (SongObject)i.next();
+            MusicBookDetailsObject album2 = songObject.getAlbumDet();
 
             if(album1.getMusicBook().equals(album2.getMusicBook())){
                 indices.add(nextIndex);
@@ -166,15 +169,15 @@ public class ensonglopedia {
         }
         for(int i=indices.size()-1; i>=0;i-- ){
             nextIndex = indices.get(i);
-            System.out.println(nextIndex);
-            Songs.remove(nextIndex);
+            songObjects.remove(nextIndex);
         }
-
+        System.out.println("Successfully deleted "+indices.size()+" songs");
+        saveClass();
     }
     public String[] readMusicBooks(){
-        Set<String> noDuplicates = Songs
+        Set<String> noDuplicates = songObjects
                 .stream()
-                .map((Song song1) -> song1.getAlbumDet().getMusicBook())
+                .map((SongObject songObject1) -> songObject1.getAlbumDet().getMusicBook())
                 .collect(Collectors.toSet());
         List<String> sortedArray = noDuplicates.stream().sorted().collect(Collectors.toList());
 

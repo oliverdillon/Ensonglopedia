@@ -1,6 +1,6 @@
-package ensonglopedia.backend;
+package com.ensonglopedia.service;
 
-public enum Criteria {
+public enum SortingCriteria {
     Title,Artist,Album;
 
     public String toString(){

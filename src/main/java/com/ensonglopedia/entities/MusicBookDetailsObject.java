@@ -1,13 +1,13 @@
-package ensonglopedia.backend;
+package com.ensonglopedia.entities;
 
-public class AlbumDet {
+public class MusicBookDetailsObject {
     private String artist, MusicBook;
 
-    public AlbumDet (){
+    public MusicBookDetailsObject(){
         this.artist = "";
         this.MusicBook = "";
     }
-    public AlbumDet (String artIn,String refIn){
+    public MusicBookDetailsObject(String artIn, String refIn){
         this.artist = artIn;
         this.MusicBook = refIn;
     }

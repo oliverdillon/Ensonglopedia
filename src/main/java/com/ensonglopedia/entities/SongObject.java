@@ -1,16 +1,16 @@
-package ensonglopedia.backend;
+package com.ensonglopedia.entities;
 
-public class Song {
+public class SongObject {
     private String title;
-    private AlbumDet album;
+    private MusicBookDetailsObject album;
 
-    public Song (){
+    public SongObject(){
         this.title = "";
-        this.album = new AlbumDet();
+        this.album = new MusicBookDetailsObject();
     }
-    public Song (String titleIn,String artIn,String refIn){
+    public SongObject(String titleIn, String artIn, String refIn){
         this.title = titleIn;
-        this.album = new AlbumDet(artIn,refIn);
+        this.album = new MusicBookDetailsObject(artIn,refIn);
     }
     public void setTitle(String title){
         this.title = title;
@@ -19,7 +19,7 @@ public class Song {
         return title;
 
     }
-    public AlbumDet getAlbumDet(){
+    public MusicBookDetailsObject getAlbumDet(){
         return album;
     }
     public String toString()

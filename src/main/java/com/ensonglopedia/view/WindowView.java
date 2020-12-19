@@ -1,11 +1,11 @@
-package ensonglopedia.frontend;
+package com.ensonglopedia.view;
 
-import ensonglopedia.backend.Song;
-import ensonglopedia.backend.ensonglopedia;
+import com.ensonglopedia.entities.SongObject;
+import com.ensonglopedia.service.ApplicationService;
+import com.ensonglopedia.view.factories.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
-public class Components implements ActionListener, KeyListener,FocusListener {
-    private JButton addBookbttn;
-    private JButton deleteBookbttn;
+public class WindowView extends JFrame implements ActionListener, FocusListener, KeyListener {
     private JPanel mainPanel;
     private	JLabel titleLabel;
     private	JPanel sTitleInputBorderPanel;
@@ -28,12 +26,15 @@ public class Components implements ActionListener, KeyListener,FocusListener {
     private JComboBox<String> sMusicBookCombo;
     private long secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
     private long milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
-    private ensonglopedia EN = new ensonglopedia();
+    private ApplicationService EN = new ApplicationService();
     private JFrame mainWindow;
+    private JButton addBookbttn;
+    private JButton deleteBookbttn;
 
-    public Components (){
+    public WindowView(){
         this.createPanel();
     }
+
     protected MaskFormatter createFormatter(String s) {
         MaskFormatter formatter = null;
         try {
@@ -44,60 +45,11 @@ public class Components implements ActionListener, KeyListener,FocusListener {
         }
         return formatter;
     }
-    private JLabel createTextLabel (String label,int xloc, int yloc){
-        JLabel textLabel = new JLabel();
-        textLabel.setSize(880, 100);
-        textLabel.setForeground(Colors.White);
-        textLabel.setText(label);
-        textLabel.setFont(Fonts.TitleFont);
-        //textLabel.setLocation(xloc,yloc);
-        textLabel.setHorizontalAlignment(xloc);
-        textLabel.setVerticalAlignment(yloc);
-
-        return textLabel;
-    }
-    private  JComboBox<String> createComboBox (JComboBox<String> comboBox ,int xloc, int yloc){
-        comboBox.setLocation(xloc,yloc);
-        comboBox.setFont(Fonts.BodyFont);
-        comboBox.setSize(360,50);
-        comboBox.addActionListener(this);
-        comboBox.setSelectedItem("Select Music Book");
-        return comboBox;
-    }
-    private JButton createButton(JButton textbttn, String label,String toolTip, int xloc, int yloc){
-        textbttn.addActionListener(this);
-        textbttn.setLocation(xloc,yloc);
-        textbttn.setFont(Fonts.SmallFont);
-        textbttn.setSize(180,50);
-        textbttn.setText(label);
-        textbttn.setToolTipText(toolTip);
-        return textbttn;
-    }
-    private JPanel createTextBox (JTextField sInputtxt,String label,int xloc, int yloc){
-        JPanel sInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        //input Text box
-        sInputtxt.setFont(Fonts.BodyFont);
-        //sInputtxt.setPreferredSize(new Dimension(150,50));
-        sInputtxt.setText(label);
-        sInputtxt.setColumns(12);
-        sInputtxt.addKeyListener(this);
-        sInputtxt.addFocusListener(this);
-
-        sInputBorderPanel.setBorder(BorderFactory.createTitledBorder(Borders.WhiteLine,
-                label, TitledBorder.RIGHT,TitledBorder.TOP,Fonts.BodyFont,Colors.White));
-        sInputBorderPanel.setBackground(Colors.Background);
-        sInputBorderPanel.setLocation(xloc,yloc);
-        sInputBorderPanel.setSize(360,120);
-        sInputBorderPanel.add(sInputtxt);
-
-        return sInputBorderPanel;
-
-    }
     private void refreshCombobox(){
         mainPanel.remove(sMusicBookCombo);
         String[] musicBooks = EN.readMusicBooks();
         sMusicBookCombo = new JComboBox<String>(musicBooks);
-        sMusicBookCombo= createComboBox (sMusicBookCombo,80,220);
+        sMusicBookCombo= FormattedComboBoxFactory.createComboBox(sMusicBookCombo,80,220,this);
         mainPanel.add(sMusicBookCombo);
         mainPanel.revalidate(); // for JFrame up to Java7 is there only validate()
         mainPanel.repaint();
@@ -108,7 +60,7 @@ public class Components implements ActionListener, KeyListener,FocusListener {
         //Panels
         mainPanel = new JPanel();
         mainPanel.setLayout(null);
-        mainPanel.setBackground(Colors.Background);
+        mainPanel.setBackground(FormattedColorsFactory.Background);
 
         //Components
         titleLabel = new JLabel();
@@ -128,15 +80,15 @@ public class Components implements ActionListener, KeyListener,FocusListener {
         sMusicBookCombo = new JComboBox<String>(musicBooks);
 
         //Window Title
-        titleLabel= createTextLabel ("Ensonglopedia",JLabel.CENTER,JLabel.CENTER);
+        titleLabel= FormattedTextLabelFactory.createTextLabel ("Ensonglopedia",JLabel.CENTER,JLabel.CENTER);
         mainPanel.add(titleLabel);
 
         //Title
-        sTitleInputBorderPanel= createTextBox (sTitleInputtxt,"Title",80,100);
+        sTitleInputBorderPanel= FormattedTextBoxFactory.createTextBox (sTitleInputtxt,"Title",80,100,this,this);
         mainPanel.add(sTitleInputBorderPanel);
 
         //Artist
-        sArtistBorderPanel= createTextBox (sArtisttxt,"Artist",440,100);
+        sArtistBorderPanel= FormattedTextBoxFactory.createTextBox (sArtisttxt,"Artist",440,100,this,this);
         mainPanel.add(sArtistBorderPanel);
 
         //MusicBook
@@ -144,15 +96,15 @@ public class Components implements ActionListener, KeyListener,FocusListener {
         //mainPanel.add(sMusicBookBorderPanel);
 
         //Select Music Book
-        sMusicBookCombo= createComboBox (sMusicBookCombo,80,220);
+        sMusicBookCombo= FormattedComboBoxFactory.createComboBox (sMusicBookCombo,80,220,this);
         mainPanel.add(sMusicBookCombo);
 
         //Button
-        addBookbttn= createButton (addBookbttn,"Add Music Book","Click me to add a music book",440,220);
+        addBookbttn= FormattedButtonFactory.createButton (addBookbttn,"Add Music Book","Click me to add a music book",440,220,this);
         mainPanel.add(addBookbttn);
 
         //Delete a music book Button
-        deleteBookbttn= createButton (deleteBookbttn,"Delete Music Book","Click me to delete a music book",620,220);
+        deleteBookbttn= FormattedButtonFactory.createButton (deleteBookbttn,"Delete Music Book","Click me to delete a music book",620,220,this);
         mainPanel.add(deleteBookbttn);
 
         return mainPanel;
@@ -196,10 +148,9 @@ public class Components implements ActionListener, KeyListener,FocusListener {
             }
             if(e.getSource() == deleteBookbttn)
             {
-                System.out.println("Check");
                 String MusicBook = sMusicBookCombo.getSelectedItem().toString();
-                Song song = new Song("","",MusicBook);
-                EN.deleteBooks(song);
+                SongObject songObject = new SongObject("","",MusicBook);
+                EN.deleteBooks(songObject);
                 refreshCombobox();
             }
         }
@@ -295,4 +246,5 @@ public class Components implements ActionListener, KeyListener,FocusListener {
             }
         }
     }
+
 }
