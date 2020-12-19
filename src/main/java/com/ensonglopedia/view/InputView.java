@@ -2,10 +2,27 @@ package com.ensonglopedia.view;
 
 import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.ApplicationService;
-import com.ensonglopedia.view.factories.*;
 
-import javax.swing.*;
-import java.awt.event.*;
+import com.ensonglopedia.view.factories.FormattedButtonFactory;
+import com.ensonglopedia.view.factories.FormattedColorsFactory;
+import com.ensonglopedia.view.factories.FormattedComboBoxFactory;
+import com.ensonglopedia.view.factories.FormattedTextBoxFactory;
+import com.ensonglopedia.view.factories.FormattedTextLabelFactory;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.ZonedDateTime;
 
 public class InputView extends JFrame implements ActionListener, FocusListener, KeyListener {
@@ -106,12 +123,6 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
             }
         }
         secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
-    }
-    public JFrame addAllComponents(JFrame mainWindow){
-        this.mainWindow = mainWindow;
-        mainWindow.add(mainPanel);
-
-        return mainWindow;
     }
 
     ///================================================///

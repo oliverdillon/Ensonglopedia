@@ -51,7 +51,7 @@ NEEDS TO CALL ALL OF THE OTHER METHODS NECESSARY FOR THE GUI.
         mainWindow.setLayout(new GridLayout(1,1));
         mainWindow.setVisible(true);
         mainWindow.setResizable(false);
-        mainWindow = inputView.addAllComponents(mainWindow);
+        mainWindow.add(inputView.createPanel());
 
 
 
