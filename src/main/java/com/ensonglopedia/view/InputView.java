@@ -4,55 +4,38 @@ import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.ApplicationService;
 import com.ensonglopedia.view.factories.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.text.MaskFormatter;
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.time.ZonedDateTime;
 
-public class WindowView extends JFrame implements ActionListener, FocusListener, KeyListener {
-    private JPanel mainPanel;
-    private	JLabel titleLabel;
-    private	JPanel sTitleInputBorderPanel;
-    private	JPanel sArtistBorderPanel;
-    private	JPanel sMusicBookBorderPanel;
-    private JTextField sTitleInputtxt;
-    private JTextField sArtisttxt;
-    private JTextField sMusicBooktxt;
-    private JComboBox<String> sMusicBookCombo;
+public class InputView extends JFrame implements ActionListener, FocusListener, KeyListener {
+
+    private ApplicationService applicationService = new ApplicationService();
+
     private long secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
     private long milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
-    private ApplicationService EN = new ApplicationService();
+
     private JFrame mainWindow;
+
     private JButton addBookbttn;
     private JButton deleteBookbttn;
 
-    public WindowView(){
+    private	JLabel titleLabel;
+
+    private JPanel mainPanel;
+    private	JPanel sTitleInputBorderPanel;
+    private	JPanel sArtistBorderPanel;
+
+    private JTextField sTitleInputtxt;
+    private JTextField sArtisttxt;
+    private JTextField sMusicBooktxt;
+
+    private JComboBox<String> sMusicBookCombo;
+
+    public InputView(){
         this.createPanel();
     }
 
-    protected MaskFormatter createFormatter(String s) {
-        MaskFormatter formatter = null;
-        try {
-            formatter = new MaskFormatter(s);
-        } catch (java.text.ParseException exc) {
-            System.err.println("formatter is bad: " + exc.getMessage());
-            System.exit(-1);
-        }
-        return formatter;
-    }
-    private void refreshCombobox(){
-        mainPanel.remove(sMusicBookCombo);
-        String[] musicBooks = EN.readMusicBooks();
-        sMusicBookCombo= FormattedComboBoxFactory.createComboBox(sMusicBookCombo,musicBooks,80,220,this);
-        mainPanel.add(sMusicBookCombo);
-        mainPanel.revalidate(); // for JFrame up to Java7 is there only validate()
-        mainPanel.repaint();
-    }
     public JPanel createPanel() //creates the Panel
     {
 
@@ -74,7 +57,7 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
         mainPanel.add(sArtistBorderPanel);
 
         //Select Music Book
-        String[] musicBooks = EN.readMusicBooks();
+        String[] musicBooks = applicationService.readMusicBooks();
 
         sMusicBookCombo= FormattedComboBoxFactory.createComboBox (sMusicBookCombo,musicBooks,80,220,this);
         mainPanel.add(sMusicBookCombo);
@@ -95,20 +78,6 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
             //------------------Add Book------------------//
             if(e.getSource() == addBookbttn)
             {
-                File file = new File("Music_book");
-                String path = file.getAbsolutePath();
-                BufferedImage icon;
-
-                try
-                {
-                    icon = ImageIO.read(new File(path+".jpg"));
-                    //mainWindow.setIconImage();
-                }
-                catch(IOException io)
-                {
-                    System.out.println("Error Loading Icon");
-                }
-
                 boolean repeat = true;
                 while (repeat==true){
                     String MusicBook = JOptionPane.showInputDialog(mainWindow,"Please enter the name of book:",
@@ -116,22 +85,24 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
 
                     //If a string was returned, say so.
                     if ((MusicBook != null) && (MusicBook.length() > 0)) {
-                        EN.addSong("","",MusicBook);
+                        applicationService.addSong("","",MusicBook);
                         repeat=false;
                     }
                     else{
                         JOptionPane.showMessageDialog(mainWindow,"Invalid input");
                     }
                 }
-                refreshCombobox();
+                String[] musicBooks = applicationService.readMusicBooks();
+                FormattedComboBoxFactory.refreshComboBox(mainPanel,sMusicBookCombo,musicBooks,this);
 
             }
             if(e.getSource() == deleteBookbttn)
             {
                 String MusicBook = sMusicBookCombo.getSelectedItem().toString();
                 SongObject songObject = new SongObject("","",MusicBook);
-                EN.deleteBooks(songObject);
-                refreshCombobox();
+                applicationService.deleteBooks(songObject);
+                String[] musicBooks = applicationService.readMusicBooks();
+                FormattedComboBoxFactory.refreshComboBox(mainPanel,sMusicBookCombo,musicBooks,this);
             }
         }
         secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
@@ -170,17 +141,7 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
                     }
                     else
                     {
-						/*
-						MusicBook ref;
-						try{
-							ref = MusicBook.valueOf(MusicBook);
-						}
-						catch(Exception ex){
-							ref =MusicBook.Book2;
-							System.out.println("Unknown MusicBook");
-						}
-						*/
-                        EN.addSong(title,artist,MusicBook);
+                        applicationService.addSong(title,artist,MusicBook);
 
                         sTitleInputtxt.setText("Title");
                         sArtisttxt.setText("Artist");
@@ -226,5 +187,4 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
             }
         }
     }
-
 }

@@ -1,7 +1,5 @@
 package com.ensonglopedia.view.factories;
 
-import com.ensonglopedia.view.WindowView;
-
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
@@ -15,5 +13,12 @@ public class FormattedComboBoxFactory {
         comboBox.addActionListener(actionListener);
         comboBox.setSelectedItem("Select Music Book");
         return comboBox;
+    }
+    public static void refreshComboBox(JPanel mainPanel, JComboBox comboBox, String[] comboValues, ActionListener actionListener){
+        mainPanel.remove(comboBox);
+        comboBox= FormattedComboBoxFactory.createComboBox(comboBox,comboValues,80,220,actionListener);
+        mainPanel.add(comboBox);
+        mainPanel.revalidate(); // for JFrame up to Java7 is there only validate()
+        mainPanel.repaint();
     }
 }

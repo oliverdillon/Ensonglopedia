@@ -9,7 +9,7 @@ public class ApplicationView {
 
     //Frame
     private JFrame mainWindow;
-    private WindowView windowView;
+    private InputView inputView;
 
     public ApplicationView(){
         //Initialise
@@ -43,7 +43,7 @@ NEEDS TO CALL ALL OF THE OTHER METHODS NECESSARY FOR THE GUI.
 		}
 		*/
         ////////////CREATE WINDOW////////////
-        windowView = new WindowView();
+        inputView = new InputView();
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
         mainWindow.setBounds(d.width/2-600, d.height/2-60, 880, 400); //set position, then dimensions for the main window when the program runs.
@@ -51,7 +51,7 @@ NEEDS TO CALL ALL OF THE OTHER METHODS NECESSARY FOR THE GUI.
         mainWindow.setLayout(new GridLayout(1,1));
         mainWindow.setVisible(true);
         mainWindow.setResizable(false);
-        mainWindow = windowView.addAllComponents(mainWindow);
+        mainWindow = inputView.addAllComponents(mainWindow);
 
 
 
