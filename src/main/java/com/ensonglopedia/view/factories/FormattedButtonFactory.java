@@ -6,6 +6,7 @@ import java.util.EventListener;
 
 public class FormattedButtonFactory {
     public static JButton createButton(JButton textbttn, String label, String toolTip, int xloc, int yloc, ActionListener listener){
+        textbttn =new JButton();
         textbttn.addActionListener(listener);
         textbttn.setLocation(xloc,yloc);
         textbttn.setFont(FormattedFontFactory.SmallFont);

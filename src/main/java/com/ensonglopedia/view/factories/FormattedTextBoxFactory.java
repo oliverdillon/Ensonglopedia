@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 public class FormattedTextBoxFactory {
     public static JPanel createTextBox(JTextField sInputtxt, String label, int xloc, int yloc, KeyListener keyListener, FocusListener focusListener){
         JPanel sInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        sInputtxt = new JTextField();
         //input Text box
         sInputtxt.setFont(FormattedFontFactory.BodyFont);
         //sInputtxt.setPreferredSize(new Dimension(150,50));

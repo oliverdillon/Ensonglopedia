@@ -48,8 +48,7 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
     private void refreshCombobox(){
         mainPanel.remove(sMusicBookCombo);
         String[] musicBooks = EN.readMusicBooks();
-        sMusicBookCombo = new JComboBox<String>(musicBooks);
-        sMusicBookCombo= FormattedComboBoxFactory.createComboBox(sMusicBookCombo,80,220,this);
+        sMusicBookCombo= FormattedComboBoxFactory.createComboBox(sMusicBookCombo,musicBooks,80,220,this);
         mainPanel.add(sMusicBookCombo);
         mainPanel.revalidate(); // for JFrame up to Java7 is there only validate()
         mainPanel.repaint();
@@ -61,23 +60,6 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
         mainPanel = new JPanel();
         mainPanel.setLayout(null);
         mainPanel.setBackground(FormattedColorsFactory.Background);
-
-        //Components
-        titleLabel = new JLabel();
-
-        sTitleInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        sArtistBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        sMusicBookBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        sTitleInputtxt = new JTextField();//createFormatter("U***********************")
-        sArtisttxt = new JTextField();
-        sMusicBooktxt = new JTextField();
-
-        //Button
-        addBookbttn = new JButton();
-        deleteBookbttn = new JButton();
-        String[] musicBooks = EN.readMusicBooks();
-        sMusicBookCombo = new JComboBox<String>(musicBooks);
 
         //Window Title
         titleLabel= FormattedTextLabelFactory.createTextLabel ("Ensonglopedia",JLabel.CENTER,JLabel.CENTER);
@@ -91,12 +73,10 @@ public class WindowView extends JFrame implements ActionListener, FocusListener,
         sArtistBorderPanel= FormattedTextBoxFactory.createTextBox (sArtisttxt,"Artist",440,100,this,this);
         mainPanel.add(sArtistBorderPanel);
 
-        //MusicBook
-        //sMusicBookBorderPanel= createTextBox (sMusicBooktxt,"MusicBook",800,100);
-        //mainPanel.add(sMusicBookBorderPanel);
-
         //Select Music Book
-        sMusicBookCombo= FormattedComboBoxFactory.createComboBox (sMusicBookCombo,80,220,this);
+        String[] musicBooks = EN.readMusicBooks();
+
+        sMusicBookCombo= FormattedComboBoxFactory.createComboBox (sMusicBookCombo,musicBooks,80,220,this);
         mainPanel.add(sMusicBookCombo);
 
         //Button
