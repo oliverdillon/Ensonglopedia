@@ -1,5 +1,6 @@
 package com.ensonglopedia.view;
 
+import com.ensonglopedia.dao.ApplicationRepository;
 import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.ApplicationService;
 
@@ -8,10 +9,12 @@ import com.ensonglopedia.view.factories.FormattedColorsFactory;
 import com.ensonglopedia.view.factories.FormattedComboBoxFactory;
 import com.ensonglopedia.view.factories.FormattedTextBoxFactory;
 import com.ensonglopedia.view.factories.FormattedTextLabelFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,14 +28,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.time.ZonedDateTime;
 
-public class InputView extends JFrame implements ActionListener, FocusListener, KeyListener {
+public class InputView extends JPanel implements ActionListener, FocusListener, KeyListener {
+    @Autowired
+    private ApplicationService applicationService;
 
-    private ApplicationService applicationService = new ApplicationService();
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
     private long secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
     private long milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
 
-    private JFrame mainWindow;
 
     private JButton addBookbttn;
     private JButton deleteBookbttn;
@@ -48,10 +53,6 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
     private JTextField sMusicBooktxt;
 
     private JComboBox<String> sMusicBookCombo;
-
-    public InputView(){
-        this.createPanel();
-    }
 
     public JPanel createPanel() //creates the Panel
     {
@@ -74,7 +75,10 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
         mainPanel.add(sArtistBorderPanel);
 
         //Select Music Book
-        String[] musicBooks = applicationService.readMusicBooks();
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        applicationRepository= applicationContext.getBean("applicationRepository", ApplicationRepository.class);
+        //ApplicationService applicationService = applicationContext.getBean("applicationService",ApplicationService.class);
+        String[] musicBooks = applicationRepository.readMusicBooks();
 
         sMusicBookCombo= FormattedComboBoxFactory.createComboBox (sMusicBookCombo,musicBooks,80,220,this);
         mainPanel.add(sMusicBookCombo);
@@ -97,7 +101,7 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
             {
                 boolean repeat = true;
                 while (repeat==true){
-                    String MusicBook = JOptionPane.showInputDialog(mainWindow,"Please enter the name of book:",
+                    String MusicBook = JOptionPane.showInputDialog(mainPanel,"Please enter the name of book:",
                             "Add Book",JOptionPane.PLAIN_MESSAGE);
 
                     //If a string was returned, say so.
@@ -106,7 +110,7 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
                         repeat=false;
                     }
                     else{
-                        JOptionPane.showMessageDialog(mainWindow,"Invalid input");
+                        JOptionPane.showMessageDialog(mainPanel,"Invalid input");
                     }
                 }
                 String[] musicBooks = applicationService.readMusicBooks();
@@ -142,13 +146,13 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
 
 
                     if(title.equals("Title")){
-                        JOptionPane.showMessageDialog(mainWindow, "Please enter a Title");
+                        JOptionPane.showMessageDialog(mainPanel, "Please enter a Title");
                     }
                     else if(artist.equals("Artist")||artist.equals("")){
-                        JOptionPane.showMessageDialog(mainWindow, "Please enter a Artist");
+                        JOptionPane.showMessageDialog(mainPanel, "Please enter a Artist");
                     }
                     else if(MusicBook.equals("Select Music Book")){
-                        JOptionPane.showMessageDialog(mainWindow, "Please select a Music Book");
+                        JOptionPane.showMessageDialog(mainPanel, "Please select a Music Book");
                     }
                     else
                     {
