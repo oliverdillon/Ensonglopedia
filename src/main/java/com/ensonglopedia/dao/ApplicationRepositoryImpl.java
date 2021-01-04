@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Repository
 public class ApplicationRepositoryImpl implements ApplicationRepository{
 
     private List<SongObject> songObjects;
@@ -58,7 +57,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
     public void saveClass(){
         try //attempt this method
         {
-            BufferedWriter bw=new BufferedWriter(new FileWriter(basedirectory+directory));
+            BufferedWriter bw=new BufferedWriter(new FileWriter(basedirectory.replace(".","")+directory));
 
             for (Iterator i = songObjects.iterator(); i.hasNext();){
                 SongObject songObject = (SongObject)i.next();
