@@ -4,9 +4,11 @@ import com.ensonglopedia.dao.ApplicationRepository;
 import com.ensonglopedia.entities.MusicBookDetailsObject;
 import com.ensonglopedia.entities.SongObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ApplicationServiceImpl implements ApplicationService{
 
     @Autowired

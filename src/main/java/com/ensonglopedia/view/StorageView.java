@@ -5,8 +5,8 @@ import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.ApplicationService;
 import com.ensonglopedia.view.factories.FormattedColorsFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,9 +25,6 @@ public class StorageView extends JPanel implements MouseListener, KeyListener {
 
     public JPanel createPanel() //creates the Panel
     {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        applicationRepository= applicationContext.getBean("applicationRepository", ApplicationRepository.class);
-
         //Panels
         mainPanel = new JPanel();
         mainPanel.setLayout(null);

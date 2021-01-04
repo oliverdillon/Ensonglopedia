@@ -10,8 +10,8 @@ import com.ensonglopedia.view.factories.FormattedComboBoxFactory;
 import com.ensonglopedia.view.factories.FormattedTextBoxFactory;
 import com.ensonglopedia.view.factories.FormattedTextLabelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -29,6 +29,7 @@ import java.awt.event.KeyListener;
 import java.time.ZonedDateTime;
 
 public class InputView extends JPanel implements ActionListener, FocusListener, KeyListener {
+
     @Autowired
     private ApplicationService applicationService;
 
@@ -75,9 +76,6 @@ public class InputView extends JPanel implements ActionListener, FocusListener, 
         mainPanel.add(sArtistBorderPanel);
 
         //Select Music Book
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        applicationRepository= applicationContext.getBean("applicationRepository", ApplicationRepository.class);
-        //ApplicationService applicationService = applicationContext.getBean("applicationService",ApplicationService.class);
         String[] musicBooks = applicationRepository.readMusicBooks();
 
         sMusicBookCombo= FormattedComboBoxFactory.createComboBox (sMusicBookCombo,musicBooks,80,220,this);

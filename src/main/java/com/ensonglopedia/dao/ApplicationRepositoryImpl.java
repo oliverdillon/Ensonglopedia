@@ -3,6 +3,7 @@ package com.ensonglopedia.dao;
 import com.ensonglopedia.entities.MusicBookDetailsObject;
 import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.SortingCriteria;
+import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,6 +13,7 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Repository
 public class ApplicationRepositoryImpl implements ApplicationRepository{
 
     private List<SongObject> songObjects;
