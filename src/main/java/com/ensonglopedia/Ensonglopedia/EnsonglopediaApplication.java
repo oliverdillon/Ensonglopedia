@@ -6,8 +6,10 @@ import com.ensonglopedia.view.GUIBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.swing.JFrame;
+
 //@SpringBootApplication
-public class EnsonglopediaApplication {
+public class EnsonglopediaApplication extends JFrame {
 
 	public static void main(String[] args) {
 //		SpringApplication.run(EnsonglopediaApplication.class, args);

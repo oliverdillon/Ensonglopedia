@@ -35,7 +35,7 @@ public class GUIBuilder {
 
         tabbedPane.addTab("Input", inputView.createPanel());
         tabbedPane.addTab("Stored", storageView.createPanel());
-        mainWindow.add(tabbedPane);
+        mainWindow.getContentPane().add(tabbedPane);
         mainWindow.setVisible(true);
     }
 }

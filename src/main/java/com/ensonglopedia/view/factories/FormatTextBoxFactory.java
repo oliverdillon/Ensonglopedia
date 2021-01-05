@@ -1,22 +1,23 @@
 package com.ensonglopedia.view.factories;
 
+import com.ensonglopedia.view.InputView;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 
-public class FormattedTextBoxFactory {
-    public static JPanel createTextBox(JTextField sInputtxt, String label, int xloc, int yloc, KeyListener keyListener, FocusListener focusListener){
+public class FormatTextBoxFactory {
+    public static JPanel createTextBox(JTextField sInputtxt, String label, int xloc, int yloc, InputView inputView){
         JPanel sInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        sInputtxt = new JTextField();
         //input Text box
         sInputtxt.setFont(FormattedFontFactory.BodyFont);
         //sInputtxt.setPreferredSize(new Dimension(150,50));
         sInputtxt.setText(label);
         sInputtxt.setColumns(12);
-        sInputtxt.addKeyListener(keyListener);
-        sInputtxt.addFocusListener(focusListener);
+        sInputtxt.addKeyListener(inputView);
+        sInputtxt.addFocusListener(inputView);
 
         sInputBorderPanel.setBorder(BorderFactory.createTitledBorder(FormattedBordersFactory.WhiteLine,
                 label, TitledBorder.RIGHT,TitledBorder.TOP, FormattedFontFactory.BodyFont, FormattedColorsFactory.White));

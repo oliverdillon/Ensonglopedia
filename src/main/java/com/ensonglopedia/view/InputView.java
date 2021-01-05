@@ -4,21 +4,15 @@ import com.ensonglopedia.dao.ApplicationRepository;
 import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.ApplicationService;
 
-import com.ensonglopedia.view.factories.FormattedButtonFactory;
+import com.ensonglopedia.view.factories.FormatButtonFactory;
 import com.ensonglopedia.view.factories.FormattedColorsFactory;
 import com.ensonglopedia.view.factories.FormattedComboBoxFactory;
-import com.ensonglopedia.view.factories.FormattedTextBoxFactory;
+import com.ensonglopedia.view.factories.FormatTextBoxFactory;
 import com.ensonglopedia.view.factories.FormattedTextLabelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.time.ZonedDateTime;
 
-public class InputView extends JPanel implements ActionListener, FocusListener, KeyListener {
+public class InputView extends JFrame implements ActionListener, FocusListener, KeyListener {
 
     @Autowired
     private ApplicationService applicationService;
@@ -40,8 +34,8 @@ public class InputView extends JPanel implements ActionListener, FocusListener, 
     private long milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
 
 
-    private JButton addBookbttn;
-    private JButton deleteBookbttn;
+    private JButton addBookbttn = new JButton();
+    private JButton deleteBookbttn = new JButton();
 
     private	JLabel titleLabel;
 
@@ -49,9 +43,9 @@ public class InputView extends JPanel implements ActionListener, FocusListener, 
     private	JPanel sTitleInputBorderPanel;
     private	JPanel sArtistBorderPanel;
 
-    private JTextField sTitleInputtxt;
-    private JTextField sArtisttxt;
-    private JTextField sMusicBooktxt;
+    private JTextField sTitleInputtxt= new JTextField();;
+    private JTextField sArtisttxt = new JTextField();;
+    private JTextField sMusicBooktxt = new JTextField();;
 
     private JComboBox<String> sMusicBookCombo;
 
@@ -68,11 +62,11 @@ public class InputView extends JPanel implements ActionListener, FocusListener, 
         mainPanel.add(titleLabel);
 
         //Title
-        sTitleInputBorderPanel= FormattedTextBoxFactory.createTextBox (sTitleInputtxt,"Title",80,100,this,this);
+        sTitleInputBorderPanel= FormatTextBoxFactory.createTextBox (sTitleInputtxt,"Title",80,100,this);
         mainPanel.add(sTitleInputBorderPanel);
 
         //Artist
-        sArtistBorderPanel= FormattedTextBoxFactory.createTextBox (sArtisttxt,"Artist",440,100,this,this);
+        sArtistBorderPanel= FormatTextBoxFactory.createTextBox (sArtisttxt,"Artist",440,100,this);
         mainPanel.add(sArtistBorderPanel);
 
         //Select Music Book
@@ -82,18 +76,18 @@ public class InputView extends JPanel implements ActionListener, FocusListener, 
         mainPanel.add(sMusicBookCombo);
 
         //Button
-        addBookbttn= FormattedButtonFactory.createButton (addBookbttn,"Add Music Book","Click me to add a music book",440,220,this);
+        addBookbttn= FormatButtonFactory.createButton (addBookbttn,"Add Music Book","Click me to add a music book",440,220,this);
         mainPanel.add(addBookbttn);
 
         //Delete a music book Button
-        deleteBookbttn= FormattedButtonFactory.createButton (deleteBookbttn,"Delete Music Book","Click me to delete a music book",620,220,this);
+        deleteBookbttn= FormatButtonFactory.createButton (deleteBookbttn,"Delete Music Book","Click me to delete a music book",620,220,this);
         mainPanel.add(deleteBookbttn);
 
         return mainPanel;
     }
     public void actionPerformed(ActionEvent e) //The Action Listener (performs tasks that are connected to each button)
     {
-        if(ZonedDateTime.now().toInstant().getEpochSecond()-secondTime>1){
+        if(ZonedDateTime.now().toInstant().toEpochMilli()-milliTime>50){
             //------------------Add Book------------------//
             if(e.getSource() == addBookbttn)
             {
@@ -103,7 +97,7 @@ public class InputView extends JPanel implements ActionListener, FocusListener, 
                             "Add Book",JOptionPane.PLAIN_MESSAGE);
 
                     //If a string was returned, say so.
-                    if ((MusicBook != null) && (MusicBook.length() > 0)) {
+                    if ((MusicBook != null)) {
                         applicationService.addSong("","",MusicBook);
                         repeat=false;
                     }
@@ -115,8 +109,10 @@ public class InputView extends JPanel implements ActionListener, FocusListener, 
                 FormattedComboBoxFactory.refreshComboBox(mainPanel,sMusicBookCombo,musicBooks,this);
 
             }
+            //------------------Delete Book------------------//
             if(e.getSource() == deleteBookbttn)
             {
+                System.out.println("out");
                 String MusicBook = sMusicBookCombo.getSelectedItem().toString();
                 SongObject songObject = new SongObject("","",MusicBook);
                 applicationService.deleteBooks(songObject);

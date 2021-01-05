@@ -15,7 +15,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class StorageView extends JPanel implements MouseListener, KeyListener {
+public class StorageView extends JFrame implements MouseListener, KeyListener {
 
     @Autowired
     private ApplicationRepository applicationRepository;
