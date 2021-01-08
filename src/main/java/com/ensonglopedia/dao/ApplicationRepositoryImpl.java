@@ -197,7 +197,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
 
 
         int length = sortedArray.size()+1;
-        int nextIndex = 0;
+        int nextIndex = 1;
 
         String[] musicBooks = new String[length];
 
@@ -206,7 +206,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
             nextIndex++;
         }
 
-        musicBooks[length-1] = "Select Music Book";
+        musicBooks[0] = "Select Music Book";
 
         return 	musicBooks;
     }
