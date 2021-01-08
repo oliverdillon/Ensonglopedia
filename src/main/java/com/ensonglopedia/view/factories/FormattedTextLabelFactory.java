@@ -9,7 +9,6 @@ public class FormattedTextLabelFactory {
         textLabel.setForeground(FormattedColorsFactory.White);
         textLabel.setText(label);
         textLabel.setFont(FormattedFontFactory.TitleFont);
-        //textLabel.setLocation(xloc,yloc);
         textLabel.setHorizontalAlignment(xloc);
         textLabel.setVerticalAlignment(yloc);
 

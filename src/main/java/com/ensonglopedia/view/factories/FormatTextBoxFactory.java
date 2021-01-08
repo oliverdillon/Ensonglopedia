@@ -10,15 +10,14 @@ import java.awt.event.KeyListener;
 
 public class FormatTextBoxFactory {
     public static JPanel createTextBox(JTextField sInputtxt, String label, int xloc, int yloc, InputView inputView){
-        JPanel sInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         //input Text box
         sInputtxt.setFont(FormattedFontFactory.BodyFont);
-        //sInputtxt.setPreferredSize(new Dimension(150,50));
         sInputtxt.setText(label);
         sInputtxt.setColumns(12);
         sInputtxt.addKeyListener(inputView);
         sInputtxt.addFocusListener(inputView);
 
+        JPanel sInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         sInputBorderPanel.setBorder(BorderFactory.createTitledBorder(FormattedBordersFactory.WhiteLine,
                 label, TitledBorder.RIGHT,TitledBorder.TOP, FormattedFontFactory.BodyFont, FormattedColorsFactory.White));
         sInputBorderPanel.setBackground(FormattedColorsFactory.Background);
