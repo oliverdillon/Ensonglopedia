@@ -22,7 +22,8 @@
 
     <bean id="applicationRepository" class="com.ensonglopedia.dao.ApplicationRepositoryImpl"/>
     <bean id="applicationService" class="com.ensonglopedia.service.ApplicationServiceImpl"/>
-    <bean id="inputView" class="com.ensonglopedia.view.InputView"/>
+    <bean id="albumInputView" class="com.ensonglopedia.view.AlbumInputView"/>
+    <bean id="songInputView" class="com.ensonglopedia.view.SongInputView"/>
     <bean id="storageView" class="com.ensonglopedia.view.StorageView"/>
     <bean id="guiBuilder" class="com.ensonglopedia.view.GUIBuilder"/>
 </beans>

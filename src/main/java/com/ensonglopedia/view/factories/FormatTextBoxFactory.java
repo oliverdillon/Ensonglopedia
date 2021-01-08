@@ -1,21 +1,20 @@
 package com.ensonglopedia.view.factories;
 
-import com.ensonglopedia.view.InputView;
+import com.ensonglopedia.view.AbstractInputView;
+import com.ensonglopedia.view.SongInputView;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyListener;
 
 public class FormatTextBoxFactory {
-    public static JPanel createTextBox(JTextField sInputtxt, String label, int xloc, int yloc, InputView inputView){
+    public static JPanel createTextBox(JTextField sInputtxt, String label, int xloc, int yloc, AbstractInputView abstractInputView){
         //input Text box
         sInputtxt.setFont(FormattedFontFactory.BodyFont);
         sInputtxt.setText(label);
         sInputtxt.setColumns(12);
-        sInputtxt.addKeyListener(inputView);
-        sInputtxt.addFocusListener(inputView);
+        sInputtxt.addKeyListener(abstractInputView);
+        sInputtxt.addFocusListener(abstractInputView);
 
         JPanel sInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         sInputBorderPanel.setBorder(BorderFactory.createTitledBorder(FormattedBordersFactory.WhiteLine,

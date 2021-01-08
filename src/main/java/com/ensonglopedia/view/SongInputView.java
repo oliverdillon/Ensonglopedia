@@ -15,14 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.swing.*;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.time.ZonedDateTime;
 
-public class InputView extends JFrame implements ActionListener, FocusListener, KeyListener {
+public class SongInputView extends AbstractInputView  {
 
     @Autowired
     private ApplicationService applicationService;
@@ -34,21 +31,20 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
     private long milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
 
 
-    private JButton addBookbttn = new JButton();
-    private JButton deleteBookbttn = new JButton();
+    private JButton addAlbumbttn = new JButton();
+    private JButton deleteAlbumbttn = new JButton();
 
     private	JLabel titleLabel;
 
     private JPanel mainPanel;
     private	JPanel sTitleInputBorderPanel;
     private	JPanel sArtistBorderPanel;
-    private JPanel sMusicBookBorderPanel;
+    private JPanel sAlbumBorderPanel;
 
-    private JTextField sTitleInputtxt= new JTextField();;
-    private JTextField sArtisttxt = new JTextField();;
-    private JTextField sMusicBooktxt = new JTextField();;
+    private JTextField sTitleInputtxt= new JTextField();
+    private JTextField sArtisttxt = new JTextField();
 
-    private JComboBox<String> sMusicBookCombo = new JComboBox<>();
+    private JComboBox<String> sAlbumCombo = new JComboBox<>();
 
     public JPanel createPanel() //creates the Panel
     {
@@ -59,66 +55,80 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
         mainPanel.setBackground(FormattedColorsFactory.Background);
 
         //Window Title
-        titleLabel= FormattedTextLabelFactory.createTextLabel ("Ensonglopedia",JLabel.CENTER,JLabel.CENTER);
+        titleLabel= FormattedTextLabelFactory
+                .createTextLabel ("Ensonglopedia",JLabel.CENTER,JLabel.CENTER);
         mainPanel.add(titleLabel);
 
         //Title
-        sTitleInputBorderPanel= FormatTextBoxFactory.createTextBox (sTitleInputtxt,"Title",80,100,this);
+        sTitleInputBorderPanel= FormatTextBoxFactory
+                .createTextBox (sTitleInputtxt,"Title",
+                        80,100,this);
         mainPanel.add(sTitleInputBorderPanel);
 
         //Artist
-        sArtistBorderPanel= FormatTextBoxFactory.createTextBox (sArtisttxt,"Artist",440,100,this);
+        sArtistBorderPanel= FormatTextBoxFactory
+                .createTextBox (sArtisttxt,"Artist",
+                        440,100,this);
         mainPanel.add(sArtistBorderPanel);
 
-        //Select Music Book
-        String[] musicBooks = applicationRepository.readMusicBooks();
+        //Select Album
+        String[] albums = applicationRepository.readAlbums();
 
-        sMusicBookBorderPanel= FormattedComboBoxFactory.createComboBox (sMusicBookCombo, "Album",musicBooks,800,100,this);
-        mainPanel.add(sMusicBookBorderPanel);
+        sAlbumBorderPanel= FormattedComboBoxFactory
+                .createComboBox (sAlbumCombo, "Album",
+                        albums,800,100,this);
+        mainPanel.add(sAlbumBorderPanel);
 
         //Button
-        addBookbttn= FormatButtonFactory.createButton (addBookbttn,"Add Music Book","Click me to add a music book",440,220,this);
-        mainPanel.add(addBookbttn);
+        addAlbumbttn= FormatButtonFactory
+                .createButton (addAlbumbttn,"Add Album",
+                        "Click me to add a album",
+                        440,220,this);
+        mainPanel.add(addAlbumbttn);
 
-        //Delete a music book Button
-        deleteBookbttn= FormatButtonFactory.createButton (deleteBookbttn,"Delete Music Book","Click me to delete a music book",620,220,this);
-        mainPanel.add(deleteBookbttn);
+        //Delete a album Button
+        deleteAlbumbttn= FormatButtonFactory
+                .createButton (deleteAlbumbttn,"Delete Album",
+                        "Click me to delete a album",
+                        620,220,this);
+        mainPanel.add(deleteAlbumbttn);
 
         return mainPanel;
     }
+    @Override
     public void actionPerformed(ActionEvent e) //The Action Listener (performs tasks that are connected to each button)
     {
         if(ZonedDateTime.now().toInstant().toEpochMilli()-milliTime>50){
-            //------------------Add Book------------------//
-            if(e.getSource() == addBookbttn)
+            //------------------Add Album------------------//
+            if(e.getSource() == addAlbumbttn)
             {
                 boolean repeat = true;
                 while (repeat==true){
-                    String MusicBook = JOptionPane.showInputDialog(mainPanel,"Please enter the name of book:",
-                            "Add Book",JOptionPane.PLAIN_MESSAGE);
+                    String Album = JOptionPane.showInputDialog(mainPanel,"Please enter the name of album:",
+                            "Add Album",JOptionPane.PLAIN_MESSAGE);
 
                     //If a string was returned, say so.
-                    if ((MusicBook != null)) {
-                        applicationService.addSong("","",MusicBook);
+                    if ((Album != null)) {
+                        applicationService.addSong("","",Album);
                         repeat=false;
                     }
                     else{
                         JOptionPane.showMessageDialog(mainPanel,"Invalid input");
                     }
                 }
-                String[] musicBooks = applicationService.readMusicBooks();
-                FormattedComboBoxFactory.refreshComboBox(mainPanel,sMusicBookBorderPanel,sMusicBookCombo,"Album",musicBooks,this);
+                String[] albums = applicationService.readAlbums();
+                FormattedComboBoxFactory.refreshComboBox(mainPanel,sAlbumBorderPanel,sAlbumCombo,"Album",albums,this);
 
             }
-            //------------------Delete Book------------------//
-            if(e.getSource() == deleteBookbttn)
+            //------------------Delete Album------------------//
+            if(e.getSource() == deleteAlbumbttn)
             {
                 System.out.println("out");
-                String MusicBook = sMusicBookCombo.getSelectedItem().toString();
-                SongObject songObject = new SongObject("","",MusicBook);
-                applicationService.deleteBooks(songObject);
-                String[] musicBooks = applicationService.readMusicBooks();
-                FormattedComboBoxFactory.refreshComboBox(mainPanel,sMusicBookBorderPanel,sMusicBookCombo,"Album",musicBooks,this);
+                String Album = sAlbumCombo.getSelectedItem().toString();
+                SongObject songObject = new SongObject("","",Album);
+                applicationService.deleteAlbums(songObject);
+                String[] albums = applicationService.readAlbums();
+                FormattedComboBoxFactory.refreshComboBox(mainPanel,sAlbumBorderPanel,sAlbumCombo,"Album",albums,this);
             }
         }
         secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
@@ -127,6 +137,7 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
     ///================================================///
     ///KEY LISTENERS///
     ///================================================///
+    @Override
     public void keyReleased(KeyEvent e){
         if(ZonedDateTime.now().toInstant().toEpochMilli()-milliTime>50){
             if(e.getKeyChar() == KeyEvent.VK_ENTER)
@@ -134,13 +145,13 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
                 if(e.getSource() == sTitleInputtxt)
                     sArtisttxt.requestFocus();
                 if(e.getSource() == sArtisttxt)
-                    sMusicBookCombo.requestFocus();
-                if(e.getSource() == sMusicBookCombo)
+                    sAlbumCombo.requestFocus();
+                if(e.getSource() == sAlbumCombo)
                 {
                     sTitleInputtxt.requestFocus();
                     String title = sTitleInputtxt.getText();
                     String artist = sArtisttxt.getText();
-                    String MusicBook = sMusicBookCombo.getSelectedItem().toString();
+                    String Album = sAlbumCombo.getSelectedItem().toString();
 
 
                     if(title.equals("Title")){
@@ -149,12 +160,12 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
                     else if(artist.equals("Artist")||artist.equals("")){
                         JOptionPane.showMessageDialog(mainPanel, "Please enter a Artist");
                     }
-                    else if(MusicBook.equals("Select Music Book")){
-                        JOptionPane.showMessageDialog(mainPanel, "Please select a Music Book");
+                    else if(Album.equals("Select Album")){
+                        JOptionPane.showMessageDialog(mainPanel, "Please select a Album");
                     }
                     else
                     {
-                        applicationService.addSong(title,artist,MusicBook);
+                        applicationService.addSong(title,artist,Album);
 
                         sTitleInputtxt.setText("Title");
                         sArtisttxt.setText("Artist");
@@ -164,11 +175,10 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
         }
         milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
     }
-    public void keyPressed(KeyEvent e){}
-    public void keyTyped(KeyEvent e){}
     ///================================================///
     ///FOCUS LISTENERS///
     ///================================================///
+    @Override
     public void focusGained(FocusEvent fe){
         if(fe.getSource() == sTitleInputtxt){
             if(sTitleInputtxt.getText().equals("Title"))
@@ -178,11 +188,8 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
             if(sArtisttxt.getText().equals("Artist"))
                 sArtisttxt.setText("");
         }
-        if(fe.getSource() == sMusicBooktxt){
-            if(sMusicBooktxt.getText().equals("MusicBook"))
-                sMusicBooktxt.setText("");
-        }
     }
+    @Override
     public void focusLost(FocusEvent fe){
         if(fe.getSource() == sTitleInputtxt){
             if(sTitleInputtxt.getText().equals("")){
@@ -192,11 +199,6 @@ public class InputView extends JFrame implements ActionListener, FocusListener, 
         if(fe.getSource() == sArtisttxt){
             if(sArtisttxt.getText().equals("")){
                 sArtisttxt.setText("Artist");
-            }
-        }
-        if(fe.getSource() == sMusicBooktxt){
-            if(sMusicBooktxt.getText().equals("")){
-                sMusicBooktxt.setText("MusicBook");
             }
         }
     }

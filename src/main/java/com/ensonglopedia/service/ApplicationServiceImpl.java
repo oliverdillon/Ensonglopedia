@@ -1,7 +1,7 @@
 package com.ensonglopedia.service;
 
 import com.ensonglopedia.dao.ApplicationRepository;
-import com.ensonglopedia.entities.MusicBookDetailsObject;
+import com.ensonglopedia.entities.AlbumDetailsObject;
 import com.ensonglopedia.entities.SongObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,13 +24,13 @@ public class ApplicationServiceImpl implements ApplicationService{
         applicationRepository.loadSongs();
     }
 
-    public void addSong(String Title, String Artist, String MusicBook) {
-        applicationRepository.addSong(Title, Artist, MusicBook);
+    public void addSong(String Title, String Artist, String Album) {
+        applicationRepository.addSong(Title, Artist, Album);
 
     }
 
     public void printSong(SongObject songObject){
-        System.out.println(songObject.getTitle()+"	"+ songObject.getAlbumDet().getArtist()+"	"+ songObject.getAlbumDet().getMusicBook());
+        System.out.println(songObject.getTitle()+"	"+ songObject.getAlbumDet().getArtist()+"	"+ songObject.getAlbumDet().getAlbum());
     }
 
     public SongObject searchSongs(SongObject songObjectForSearch) {
@@ -41,17 +41,17 @@ public class ApplicationServiceImpl implements ApplicationService{
         applicationRepository.saveClass();
     }
 
-    public List<SongObject> searchAlbums(MusicBookDetailsObject album1) {
+    public List<SongObject> searchAlbums(AlbumDetailsObject album1) {
         return applicationRepository.searchAlbums(album1);
     }
 
 
-    public void deleteBooks(SongObject songObjectToDelete) {
-        applicationRepository.deleteBooks(songObjectToDelete);
+    public void deleteAlbums(SongObject songObjectToDelete) {
+        applicationRepository.deleteAlbums(songObjectToDelete);
 
     }
 
-    public String[] readMusicBooks() {
-        return applicationRepository.readMusicBooks();
+    public String[] readAlbums() {
+        return applicationRepository.readAlbums();
     }
 }

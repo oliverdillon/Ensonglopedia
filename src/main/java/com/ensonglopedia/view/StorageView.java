@@ -55,13 +55,13 @@ public class StorageView extends JFrame implements MouseListener, KeyListener {
 
         int  i=0;
         int size =applicationRepository.getSongObjects().size();
-        String[] columnNames = {"Song","Artist","Music Book"};
+        String[] columnNames = {"Song","Artist","Album"};
         Object[][] data = new Object[size][3];
 
         for (SongObject s : applicationRepository.getSongObjects()) {
             data[i][0] = s.getTitle();
             data[i][1] = s.getAlbumDet().getArtist();
-            data[i][2] = s.getAlbumDet().getMusicBook();
+            data[i][2] = s.getAlbumDet().getAlbum();
             i++;
         }
 
@@ -73,8 +73,8 @@ public class StorageView extends JFrame implements MouseListener, KeyListener {
 
         //uses the member's personal info and the headings to create the members table
         JScrollPane tablePane = new JScrollPane(songTable); //creates a new scroll pane containing the members table
-        tablePane.setLocation(90,60);
-        tablePane.setSize(700,210);
+        tablePane.setLocation(10,10);
+        tablePane.setSize(1170,310);
         //tablePane.setVisible(true);
 
         return tablePane;

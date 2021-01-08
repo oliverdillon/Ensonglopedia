@@ -1,7 +1,6 @@
 package com.ensonglopedia.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -13,7 +12,10 @@ import java.awt.Toolkit;
 public class GUIBuilder {
 
     @Autowired
-    private InputView inputView;
+    private AlbumInputView albumInputView;
+
+    @Autowired
+    private SongInputView songInputView;
 
     @Autowired
     private StorageView storageView;
@@ -35,7 +37,8 @@ public class GUIBuilder {
         mainWindow.setLayout(new GridLayout(1,1));
         mainWindow.setResizable(false);
 
-        tabbedPane.addTab("Input", inputView.createPanel());
+        tabbedPane.addTab("Add Albums", albumInputView.createPanel());
+        tabbedPane.addTab("Add Songs", songInputView.createPanel());
         tabbedPane.addTab("Stored", storageView.createPanel());
         tabbedPane.getModel().addChangeListener(new ChangeListener() {
             @Override

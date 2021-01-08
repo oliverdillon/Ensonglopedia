@@ -3,7 +3,7 @@ package com.ensonglopedia.service;
 import com.ensonglopedia.entities.SongObject;
 
 public interface ApplicationService {
-    void addSong(String Title,String Artist,String MusicBook);
-    void deleteBooks(SongObject songObjectToDelete);
-    String[] readMusicBooks();
+    void addSong(String Title,String Artist,String Album);
+    void deleteAlbums(SongObject songObjectToDelete);
+    String[] readAlbums();
 }

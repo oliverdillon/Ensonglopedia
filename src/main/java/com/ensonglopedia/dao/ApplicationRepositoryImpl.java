@@ -1,6 +1,6 @@
 package com.ensonglopedia.dao;
 
-import com.ensonglopedia.entities.MusicBookDetailsObject;
+import com.ensonglopedia.entities.AlbumDetailsObject;
 import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.SortingCriteria;
 
@@ -45,7 +45,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
 
                 tempSongObject.setTitle(stringArray[0]);
                 tempSongObject.getAlbumDet().setArtist(stringArray[1]);
-                tempSongObject.getAlbumDet().setMusicBook(stringArray[2]);
+                tempSongObject.getAlbumDet().setAlbum(stringArray[2]);
 
                 songObjects.add(tempSongObject);
                 sReadLine = reader.readLine();
@@ -81,9 +81,9 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
 
     }
 
-    public void addSong(String Title,String Artist,String MusicBook){
-        SongObject songObject = new SongObject(Title,Artist,MusicBook);
-        SongObject songObjectTemp = new SongObject("","",MusicBook);
+    public void addSong(String Title,String Artist,String Album){
+        SongObject songObject = new SongObject(Title,Artist,Album);
+        SongObject songObjectTemp = new SongObject("","",Album);
         SongObject searchResults = searchSongs(songObjectTemp);
 
         if(searchResults!=null){
@@ -105,37 +105,37 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
 
     public SongObject searchSongs(SongObject songObjectForSearch){
 
-        MusicBookDetailsObject album1  = songObjectForSearch.getAlbumDet();
+        AlbumDetailsObject album1  = songObjectForSearch.getAlbumDet();
 
         for (Iterator i = songObjects.iterator(); i.hasNext();){
             SongObject songObject = (SongObject)i.next();
-            MusicBookDetailsObject album2 = songObject.getAlbumDet();
+            AlbumDetailsObject album2 = songObject.getAlbumDet();
 
             if(songObjectForSearch.getTitle().equals(songObject.getTitle()))
                 if(album1.getArtist().equals(album2.getArtist()))
-                    if(album1.getMusicBook().equals(album2.getMusicBook())){
+                    if(album1.getAlbum().equals(album2.getAlbum())){
                         return songObject;
                     }
         }
         return null;
     }
 
-    public List <SongObject> searchAlbums(MusicBookDetailsObject album1){
+    public List <SongObject> searchAlbums(AlbumDetailsObject album1){
         List <SongObject> searchResults = new LinkedList<SongObject>();
         for (Iterator i = songObjects.iterator(); i.hasNext();){
             SongObject songObject = (SongObject)i.next();
-            MusicBookDetailsObject album2 = songObject.getAlbumDet();
+            AlbumDetailsObject album2 = songObject.getAlbumDet();
 
             if(album1.getArtist()!=album2.getArtist())
                 continue;
-            if(album1.getMusicBook()!=album2.getMusicBook())
+            if(album1.getAlbum()!=album2.getAlbum())
                 continue;
             searchResults.add(songObject);
         }
         return searchResults;
     }
 
-    public void sortMusicBooks(SortingCriteria sortingCriteria){
+    public void sortAlbums(SortingCriteria sortingCriteria){
         //sort linked list;
 
         Collections.sort(songObjects,new Comparator<SongObject>() {
@@ -153,8 +153,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
                         temp2 = o2.getAlbumDet().getArtist();
                         break;
                     case Album:
-                        temp1 = o1.getAlbumDet().getMusicBook();
-                        temp2 = o2.getAlbumDet().getMusicBook();
+                        temp1 = o1.getAlbumDet().getAlbum();
+                        temp2 = o2.getAlbumDet().getAlbum();
                         break;
                     default:
                         temp1 = o1.getTitle();
@@ -168,15 +168,15 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
             }
         });
     }
-    public void deleteBooks(SongObject songObjectToDelete){
-        MusicBookDetailsObject album1  = songObjectToDelete.getAlbumDet();
+    public void deleteAlbums(SongObject songObjectToDelete){
+        AlbumDetailsObject album1  = songObjectToDelete.getAlbumDet();
         int nextIndex =0;
         List<Integer> indices = new LinkedList <Integer>();
         for (Iterator i = songObjects.iterator(); i.hasNext();){
             SongObject songObject = (SongObject)i.next();
-            MusicBookDetailsObject album2 = songObject.getAlbumDet();
+            AlbumDetailsObject album2 = songObject.getAlbumDet();
 
-            if(album1.getMusicBook().equals(album2.getMusicBook())){
+            if(album1.getAlbum().equals(album2.getAlbum())){
                 indices.add(nextIndex);
             }
             nextIndex +=1;
@@ -188,10 +188,10 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
         System.out.println("Successfully deleted "+indices.size()+" songs");
         saveClass();
     }
-    public String[] readMusicBooks(){
+    public String[] readAlbums(){
         Set<String> noDuplicates = songObjects
                 .stream()
-                .map((SongObject songObject1) -> songObject1.getAlbumDet().getMusicBook())
+                .map((SongObject songObject1) -> songObject1.getAlbumDet().getAlbum())
                 .collect(Collectors.toSet());
         List<String> sortedArray = noDuplicates.stream().sorted().collect(Collectors.toList());
 
@@ -199,15 +199,15 @@ public class ApplicationRepositoryImpl implements ApplicationRepository{
         int length = sortedArray.size()+1;
         int nextIndex = 1;
 
-        String[] musicBooks = new String[length];
+        String[] albums = new String[length];
 
         for (String song :sortedArray){
-            musicBooks[nextIndex] = song;
+            albums[nextIndex] = song;
             nextIndex++;
         }
 
-        musicBooks[0] = "Select Music Book";
+        albums[0] = "Select Album";
 
-        return 	musicBooks;
+        return 	albums;
     }
 }
