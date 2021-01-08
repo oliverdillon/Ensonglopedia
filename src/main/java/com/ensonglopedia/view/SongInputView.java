@@ -95,6 +95,10 @@ public class SongInputView extends AbstractInputView  {
 
         return mainPanel;
     }
+    public void refreshCombobox(){
+        String[] albums = applicationService.readAlbums();
+        FormattedComboBoxFactory.refreshComboBox(mainPanel,sAlbumBorderPanel,sAlbumCombo,"Album",albums,this);
+    }
     @Override
     public void actionPerformed(ActionEvent e) //The Action Listener (performs tasks that are connected to each button)
     {
@@ -116,9 +120,7 @@ public class SongInputView extends AbstractInputView  {
                         JOptionPane.showMessageDialog(mainPanel,"Invalid input");
                     }
                 }
-                String[] albums = applicationService.readAlbums();
-                FormattedComboBoxFactory.refreshComboBox(mainPanel,sAlbumBorderPanel,sAlbumCombo,"Album",albums,this);
-
+                refreshCombobox();
             }
             //------------------Delete Album------------------//
             if(e.getSource() == deleteAlbumbttn)
@@ -127,8 +129,7 @@ public class SongInputView extends AbstractInputView  {
                 String Album = sAlbumCombo.getSelectedItem().toString();
                 SongObject songObject = new SongObject("","",Album);
                 applicationService.deleteAlbums(songObject);
-                String[] albums = applicationService.readAlbums();
-                FormattedComboBoxFactory.refreshComboBox(mainPanel,sAlbumBorderPanel,sAlbumCombo,"Album",albums,this);
+                refreshCombobox();
             }
         }
         secondTime = ZonedDateTime.now().toInstant().getEpochSecond();

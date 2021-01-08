@@ -44,6 +44,8 @@ public class GUIBuilder {
             @Override
             public void stateChanged(ChangeEvent e) {
                 storageView.refreshTable();
+                songInputView.refreshCombobox();
+
             }
         });
         mainWindow.getContentPane().add(tabbedPane);
