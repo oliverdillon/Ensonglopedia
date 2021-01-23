@@ -14,9 +14,9 @@ public class FormattedComboBoxFactory {
 
     public static JPanel createComboBox(JComboBox comboBox,String label,String[] comboValues, int xloc, int yloc, AbstractInputView abstractInputView){
         comboBox.setFont(FormattedFontFactory.BodyFont);
-        comboBox.setSize(360,50);
-        comboBox.addActionListener(abstractInputView);
-        comboBox.setSelectedItem("Select Album");
+        comboBox.setSelectedItem(comboValues[0]);
+        comboBox.addFocusListener(abstractInputView);
+        comboBox.addItemListener(abstractInputView);
         comboBox.setModel(new DefaultComboBoxModel(comboValues));
 
         JPanel sInputBorderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

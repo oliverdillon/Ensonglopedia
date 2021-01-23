@@ -1,5 +1,6 @@
 package com.ensonglopedia.view;
 
+import com.ensonglopedia.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -20,6 +21,9 @@ public class GUIBuilder {
     @Autowired
     private StorageView storageView;
 
+    @Autowired
+    private ApplicationService applicationService;
+
     private JFrame mainWindow;
 
     private JTabbedPane tabbedPane;
@@ -29,6 +33,7 @@ public class GUIBuilder {
         mainWindow = new JFrame("Ensonglopedia");
         ////////////CREATE WINDOW////////////
         tabbedPane = new JTabbedPane();
+        applicationService.readRepositories();
 
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
@@ -43,7 +48,7 @@ public class GUIBuilder {
         tabbedPane.getModel().addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                storageView.refreshTable();
+                storageView.refreshTable("");
                 songInputView.refreshCombobox();
 
             }

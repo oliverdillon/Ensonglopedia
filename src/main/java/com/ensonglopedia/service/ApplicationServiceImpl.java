@@ -1,8 +1,9 @@
 package com.ensonglopedia.service;
 
-import com.ensonglopedia.dao.ApplicationRepository;
+import com.ensonglopedia.repository.SongBookRepository;
 import com.ensonglopedia.entities.AlbumDetailsObject;
 import com.ensonglopedia.entities.SongObject;
+import com.ensonglopedia.repository.VinylRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -10,23 +11,36 @@ import java.util.List;
 public class ApplicationServiceImpl implements ApplicationService{
 
     @Autowired
-    ApplicationRepository applicationRepository;
+    SongBookRepository songBookRepository;
+
+    @Autowired
+    VinylRepository vinylRepository;
 
     public ApplicationServiceImpl(){
-        System.out.println("Build Service");
+    }
+    public void readRepositories(){
+        songBookRepository.loadSongs();
+        vinylRepository.loadVinyls();
     }
 
+    public void saveRepositories(){
+        songBookRepository.saveSongs();
+        vinylRepository.saveVinyls();
+    }
     public List<SongObject> getSongObjects() {
-        return applicationRepository.getSongObjects();
+        return songBookRepository.getSongObjects();
     }
 
     public void loadSongs() {
-        applicationRepository.loadSongs();
+        songBookRepository.loadSongs();
     }
 
     public void addSong(String Title, String Artist, String Album) {
-        applicationRepository.addSong(Title, Artist, Album);
+        songBookRepository.addSong(Title, Artist, Album);
+    }
 
+    public void addVinylAlbum(String Artist, String Album,String ReleaseDate) {
+        vinylRepository.addVinyl(Artist, Album,ReleaseDate);
     }
 
     public void printSong(SongObject songObject){
@@ -34,24 +48,23 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     public SongObject searchSongs(SongObject songObjectForSearch) {
-        return applicationRepository.searchSongs(songObjectForSearch);
+        return songBookRepository.searchSongs(songObjectForSearch);
     }
 
     public void saveClass() {
-        applicationRepository.saveClass();
+        songBookRepository.saveSongs();
     }
 
     public List<SongObject> searchAlbums(AlbumDetailsObject album1) {
-        return applicationRepository.searchAlbums(album1);
+        return songBookRepository.searchAlbums(album1);
     }
 
 
     public void deleteAlbums(SongObject songObjectToDelete) {
-        applicationRepository.deleteAlbums(songObjectToDelete);
-
+        songBookRepository.deleteAlbums(songObjectToDelete);
     }
 
     public String[] readAlbums() {
-        return applicationRepository.readAlbums();
+        return songBookRepository.readAlbums();
     }
 }

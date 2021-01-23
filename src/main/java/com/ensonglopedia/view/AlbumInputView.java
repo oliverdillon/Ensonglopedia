@@ -1,18 +1,22 @@
 package com.ensonglopedia.view;
 
-import com.ensonglopedia.dao.ApplicationRepository;
+import com.ensonglopedia.repository.SongBookRepository;
 import com.ensonglopedia.service.ApplicationService;
-import com.ensonglopedia.view.factories.FormatButtonFactory;
-import com.ensonglopedia.view.factories.FormatTextBoxFactory;
-import com.ensonglopedia.view.factories.FormattedColorsFactory;
-import com.ensonglopedia.view.factories.FormattedTextLabelFactory;
+import com.ensonglopedia.view.factories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class AlbumInputView extends AbstractInputView {
 
@@ -20,7 +24,7 @@ public class AlbumInputView extends AbstractInputView {
     private ApplicationService applicationService;
 
     @Autowired
-    private ApplicationRepository applicationRepository;
+    private SongBookRepository songBookRepository;
 
     private long secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
     private long milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
@@ -34,9 +38,11 @@ public class AlbumInputView extends AbstractInputView {
     private JPanel mainPanel;
     private	JPanel sArtistBorderPanel;
     private JPanel sAlbumBorderPanel;
+    private JPanel sDateBorderPanel;
 
     private JTextField sArtisttxt = new JTextField();
     private JTextField sAlbumtxt = new JTextField();
+    private JComboBox sYearCombo = new JComboBox();
 
 
     public JPanel createPanel() //creates the Panel
@@ -55,16 +61,16 @@ public class AlbumInputView extends AbstractInputView {
         //Artist
         sArtistBorderPanel= FormatTextBoxFactory
                 .createTextBox (sArtisttxt,"Artist",
-                        240,100,this);
+                        60,100,this);
         mainPanel.add(sArtistBorderPanel);
 
         //Select Album
-        String[] albums = applicationRepository.readAlbums();
+        String[] albums = songBookRepository.readAlbums();
 
         sAlbumBorderPanel= FormatTextBoxFactory
                 .createTextBox (sAlbumtxt,
                         "Album",
-                        600,100,this);
+                        420,100,this);
         mainPanel.add(sAlbumBorderPanel);
 
         //Button
@@ -74,11 +80,26 @@ public class AlbumInputView extends AbstractInputView {
                         510,220,this);
         mainPanel.add(addAlbumbttn);
 
+
+        String[] years = new String[101];
+        Calendar calendar = new GregorianCalendar();
+        years[0]="YYYY                           ";
+        int currentYear = calendar.getInstance().get(calendar.YEAR);
+        for (int i=1;i<years.length;i++){
+            int num = currentYear-100+i;
+            years[i]=""+num;
+        }
+        sDateBorderPanel = FormattedComboBoxFactory
+                .createComboBox (sYearCombo, "Release Date",
+                        years,780,100,this);
+        mainPanel.add(sDateBorderPanel);
+
         return mainPanel;
     }
     public void inputInfo (){
         String artist = sArtisttxt.getText();
         String album = sAlbumtxt.getText();
+        String releaseYear = (String)sYearCombo.getSelectedItem();
 
         if(artist.equals("Artist")||artist.equals("")){
             JOptionPane.showMessageDialog(mainPanel, "Please enter a Artist");
@@ -86,11 +107,15 @@ public class AlbumInputView extends AbstractInputView {
         else if(album.equals("Album")||album.equals("")){
             JOptionPane.showMessageDialog(mainPanel, "Please enter a Album");
         }
+        else if(releaseYear.equals("YYYY                           ")){
+            JOptionPane.showMessageDialog(mainPanel, "Please enter a release year");
+        }
         else
         {
-            applicationService.addSong("",artist,album);
+            applicationService.addVinylAlbum(artist,album,releaseYear);
             sArtisttxt.setText("Artist");
             sAlbumtxt.setText("Album");
+            sYearCombo.setSelectedItem("YYYY                           ");
         }
 
     }
@@ -118,6 +143,10 @@ public class AlbumInputView extends AbstractInputView {
                 if(e.getSource() == sArtisttxt)
                     sAlbumtxt.requestFocus();
                 if(e.getSource() == sAlbumtxt)
+                {
+                    sYearCombo.requestFocus();
+                }
+                if(e.getSource() == sYearCombo)
                 {
                     sArtisttxt.requestFocus();
                     inputInfo();

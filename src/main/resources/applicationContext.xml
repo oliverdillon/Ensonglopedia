@@ -20,10 +20,16 @@
 <!--        <property name="password" value=""></property>-->
 <!--    </bean>-->
 
-    <bean id="applicationRepository" class="com.ensonglopedia.dao.ApplicationRepositoryImpl"/>
+    <bean id="songDao" class="com.ensonglopedia.dao.SongDaoImpl"/>
+    <bean id="vinylDao" class="com.ensonglopedia.dao.VinylDaoImpl"/>
+
+    <bean id="songBookRepository" class="com.ensonglopedia.repository.SongBookRepositoryImpl"/>
+    <bean id="vinylRepository" class="com.ensonglopedia.repository.VinylRepositoryImpl"/>
     <bean id="applicationService" class="com.ensonglopedia.service.ApplicationServiceImpl"/>
     <bean id="albumInputView" class="com.ensonglopedia.view.AlbumInputView"/>
     <bean id="songInputView" class="com.ensonglopedia.view.SongInputView"/>
     <bean id="storageView" class="com.ensonglopedia.view.StorageView"/>
     <bean id="guiBuilder" class="com.ensonglopedia.view.GUIBuilder"/>
+
+
 </beans>

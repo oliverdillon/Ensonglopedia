@@ -1,6 +1,6 @@
 package com.ensonglopedia.view;
 
-import com.ensonglopedia.dao.ApplicationRepository;
+import com.ensonglopedia.repository.SongBookRepository;
 import com.ensonglopedia.entities.SongObject;
 import com.ensonglopedia.service.ApplicationService;
 
@@ -16,6 +16,7 @@ import javax.swing.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.time.ZonedDateTime;
 
@@ -25,7 +26,7 @@ public class SongInputView extends AbstractInputView  {
     private ApplicationService applicationService;
 
     @Autowired
-    private ApplicationRepository applicationRepository;
+    private SongBookRepository songBookRepository;
 
     private long secondTime = ZonedDateTime.now().toInstant().getEpochSecond();
     private long milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
@@ -42,7 +43,7 @@ public class SongInputView extends AbstractInputView  {
     private JPanel sAlbumBorderPanel;
 
     private JTextField sTitleInputtxt= new JTextField();
-    private JTextField sArtisttxt = new JTextField();
+    private JComboBox<String>  sArtistCombo = new JComboBox<>();
 
     private JComboBox<String> sAlbumCombo = new JComboBox<>();
 
@@ -62,22 +63,28 @@ public class SongInputView extends AbstractInputView  {
         //Title
         sTitleInputBorderPanel= FormatTextBoxFactory
                 .createTextBox (sTitleInputtxt,"Title",
-                        80,100,this);
+                        800,100,this);
         mainPanel.add(sTitleInputBorderPanel);
 
         //Artist
-        sArtistBorderPanel= FormatTextBoxFactory
-                .createTextBox (sArtisttxt,"Artist",
-                        440,100,this);
+        String[] artists = {"Artist"};
+        //applicationRepository.searchAlbums();
+
+        sArtistBorderPanel= FormattedComboBoxFactory
+                .createComboBox (sArtistCombo, "Artist",
+                        artists,440,100,this);
         mainPanel.add(sArtistBorderPanel);
+        //AutoCompleteDecorator.decorate(sArtistCombo);
+
 
         //Select Album
-        String[] albums = applicationRepository.readAlbums();
+        String[] albums = songBookRepository.readAlbums();
 
         sAlbumBorderPanel= FormattedComboBoxFactory
                 .createComboBox (sAlbumCombo, "Album",
-                        albums,800,100,this);
+                        albums,80,100,this);
         mainPanel.add(sAlbumBorderPanel);
+        //AutoCompleteDecorator.decorate(sAlbumCombo);
 
         //Button
         addAlbumbttn= FormatButtonFactory
@@ -125,7 +132,6 @@ public class SongInputView extends AbstractInputView  {
             //------------------Delete Album------------------//
             if(e.getSource() == deleteAlbumbttn)
             {
-                System.out.println("out");
                 String Album = sAlbumCombo.getSelectedItem().toString();
                 SongObject songObject = new SongObject("","",Album);
                 applicationService.deleteAlbums(songObject);
@@ -144,14 +150,14 @@ public class SongInputView extends AbstractInputView  {
             if(e.getKeyChar() == KeyEvent.VK_ENTER)
             {
                 if(e.getSource() == sTitleInputtxt)
-                    sArtisttxt.requestFocus();
-                if(e.getSource() == sArtisttxt)
+                    sArtistCombo.requestFocus();
+                if(e.getSource() == sArtistCombo)
                     sAlbumCombo.requestFocus();
                 if(e.getSource() == sAlbumCombo)
                 {
                     sTitleInputtxt.requestFocus();
                     String title = sTitleInputtxt.getText();
-                    String artist = sArtisttxt.getText();
+                    String artist = sArtistCombo.getSelectedItem().toString();
                     String Album = sAlbumCombo.getSelectedItem().toString();
 
 
@@ -169,12 +175,24 @@ public class SongInputView extends AbstractInputView  {
                         applicationService.addSong(title,artist,Album);
 
                         sTitleInputtxt.setText("Title");
-                        sArtisttxt.setText("Artist");
                     }
                 }
             }
         }
         milliTime = ZonedDateTime.now().toInstant().toEpochMilli();
+    }
+    ///================================================///
+    ///ITEM LISTENERS///
+    ///================================================///
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            sAlbumCombo.setSelectedItem("");
+            // do something with object
+        }
+        if (e.getStateChange() == ItemEvent.DESELECTED) {
+            Object item = e.getItem();
+            // do something with object
+        }
     }
     ///================================================///
     ///FOCUS LISTENERS///
@@ -185,9 +203,17 @@ public class SongInputView extends AbstractInputView  {
             if(sTitleInputtxt.getText().equals("Title"))
                 sTitleInputtxt.setText("");
         }
-        if(fe.getSource() == sArtisttxt){
-            if(sArtisttxt.getText().equals("Artist"))
-                sArtisttxt.setText("");
+        if(fe.getSource() == sAlbumCombo){
+            if(sAlbumCombo.getSelectedItem().toString().equals("Album"))
+                sAlbumCombo.setSelectedItem("");
+        }
+        if(fe.getSource() == sArtistCombo){
+            if(sArtistCombo.getSelectedItem().toString().equals("Artist"))
+                sArtistCombo.setSelectedItem("");
+        }
+        if(fe.getSource() == sAlbumCombo){
+            if(sAlbumCombo.getSelectedItem().toString().equals("Album"))
+                sAlbumCombo.setSelectedItem("");
         }
     }
     @Override
@@ -195,11 +221,6 @@ public class SongInputView extends AbstractInputView  {
         if(fe.getSource() == sTitleInputtxt){
             if(sTitleInputtxt.getText().equals("")){
                 sTitleInputtxt.setText("Title");
-            }
-        }
-        if(fe.getSource() == sArtisttxt){
-            if(sArtisttxt.getText().equals("")){
-                sArtisttxt.setText("Artist");
             }
         }
     }
